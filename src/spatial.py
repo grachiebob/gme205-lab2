@@ -1,4 +1,5 @@
 
+import csv
 import math
 
 # Part B. Designing a Spatial Object: Point (Incremental)
@@ -56,3 +57,40 @@ class Point:
         )
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         return R * c
+    
+    # --------------------------------------------------------------
+    # Class method (coonstructing objects from data)
+    # --------------------------------------------------------------
+    @classmethod
+    def from_row(cls, row):
+        return cls(
+            id=str(row["id"]),
+            lon=float(row["lon"]),
+            lat=float(row["lat"]),
+            name=row.get("name"),
+            tag=row.get("tag"),
+        )
+    
+    def is_poi(self):
+        return (self.tag or "").lower() == "poi"
+
+# Part C. Designing a Spatial Collection: PointSet
+   
+class PointSet:
+    def __init__(self, points):
+        self.points = points
+    
+    @classmethod
+    def from_csv(cls, path):
+        points = []
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                try:
+                    points.append(Point.from_row(row))
+                except ValueError:
+                    continue
+        return cls(points)
+    
+    def count(self):
+        return len(self.points)
