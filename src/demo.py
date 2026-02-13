@@ -22,6 +22,3 @@ q = Point("B", 129.0, 17.0)
 print(q.id, q.lon, q.lat)
 
 print(p.distance_to(q))
-
-
-
