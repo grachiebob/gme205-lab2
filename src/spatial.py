@@ -94,3 +94,16 @@ class PointSet:
     
     def count(self):
         return len(self.points)
+    
+    def bbox(self):
+        if not self.points:
+            return None
+        
+        lons = [p.lon for p in self.points]
+        lats = [p.lat for p in self.points]
+
+        return (min(lons), min(lats), max(lons), max(lats))
+    
+    def filter_by_tag(self, tag):
+        return PointSet([p for p in self.points if p.tag == tag])
+
